@@ -118,7 +118,7 @@ func main() {
 	}
 	var num = 0
 	var timesum time.Duration = 0.0
-	for endCriteria(num, *count) {
+	for doContinue(num, *count) {
 		start := time.Now()
 
 		//queryStr := "MEAS:VOLT? 1" // needs ~19.4ms
@@ -163,7 +163,7 @@ func main() {
 
 }
 
-func endCriteria(num int, c int) bool {
+func doContinue(num int, c int) bool {
 	if c != 0 {
 		return num < c
 	} else {
