@@ -74,6 +74,14 @@ func main() {
 		"address", -1,
 		"The primary address of the GPIB device to query.",
 	)
+	count := flag.Int(
+		"count", 1,
+		"repeat count for query",
+	)
+	wait := flag.Int(
+		"wait", 2,
+		"wait time in seconds between queries",
+	)
 
 	flag.Parse()
 
@@ -105,9 +113,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	var num int64 = 0
+	if *verbose {
+		fmt.Printf("%v iterations, %vs wait time between iterations\n", *count, *wait)
+	}
+	var num = 0
 	var timesum time.Duration = 0.0
-	for num < 100 {
+	for endCriteria(num, *count) {
 		start := time.Now()
 
 		//queryStr := "MEAS:VOLT? 1" // needs ~19.4ms
@@ -125,14 +136,37 @@ func main() {
 		}
 		elapsed := time.Since(start)
 		timesum += elapsed
-		fmt.Printf("%s, %s\n", strings.Trim(s, " \r\n"), elapsed)
+		lineHeader := ""
+		if *count > 1 {
+			lineHeader = fmt.Sprintf("%v ", num)
+		}
+		fmt.Printf("%v%v %v\n", lineHeader, strings.Trim(s, " \r\n"), elapsed.Microseconds())
 		num++
+
+		if *count == 0 {
+			time.Sleep(time.Duration(*wait) * time.Second)
+		} else {
+			if num < *count {
+				time.Sleep(time.Duration(*wait) * time.Second)
+			}
+		}
 	}
 	var pp float32 = float32(timesum.Microseconds())
 	pp = pp / float32(num)
 	pp = pp / 1000.0
-	fmt.Printf("Medium time in %v iterations: %v ms\n", num, pp)
+	if *verbose {
+		fmt.Printf("Medium time in %v iterations: %v ms\n", num, pp)
 
-	lines := internal.IblinesString(*board)
-	fmt.Printf("GPIB Lines: %v\n", lines)
+		lines := internal.IblinesString(*board)
+		fmt.Printf("GPIB Lines: %v\n", lines)
+	}
+
+}
+
+func endCriteria(num int, c int) bool {
+	if c != 0 {
+		return num < c
+	} else {
+		return true
+	}
 }
