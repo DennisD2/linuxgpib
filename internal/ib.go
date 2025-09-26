@@ -91,7 +91,7 @@ func RcvRespMsg(board_desc int, buffer []byte, termination int) {
 	return
 }
 
-func ReadStatusByte(board_desc int, address Address) (result int) {
+func ReadStatusByte(board_desc int, address int) (result int) {
 	C.ReadStatusByte(C.int(board_desc), C.Addr4882_t(address), (*C.short)(unsafe.Pointer(&result)))
 	return
 }
