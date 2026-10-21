@@ -30,12 +30,12 @@ func fillOutputConnectorValues() {
 	//outputConn[5] = ConnectorNumbering{0, 0} // VCC
 	outputConn[6] = ConnectorNumbering{3, 4}
 
-	outputConn[7] = ConnectorNumbering{4, 1} // out-of-order
+	outputConn[7] = ConnectorNumbering{4, 4} // out-of-order
 
-	outputConn[8] = ConnectorNumbering{2, 1}
-	outputConn[9] = ConnectorNumbering{2, 2}
-	outputConn[10] = ConnectorNumbering{2, 3}
-	outputConn[11] = ConnectorNumbering{2, 4}
+	outputConn[8] = ConnectorNumbering{2, 4}
+	outputConn[9] = ConnectorNumbering{2, 3}
+	outputConn[10] = ConnectorNumbering{2, 2}
+	outputConn[11] = ConnectorNumbering{2, 1}
 
 	outputConn[12] = ConnectorNumbering{8, 1} // out-of-order
 
@@ -44,10 +44,10 @@ func fillOutputConnectorValues() {
 	outputConn[15] = ConnectorNumbering{1, 3}
 	outputConn[16] = ConnectorNumbering{1, 4}
 
-	outputConn[17] = ConnectorNumbering{7, 1}
-	outputConn[18] = ConnectorNumbering{7, 2}
-	outputConn[19] = ConnectorNumbering{7, 3}
-	outputConn[20] = ConnectorNumbering{7, 4}
+	outputConn[17] = ConnectorNumbering{7, 4}
+	outputConn[18] = ConnectorNumbering{7, 3}
+	outputConn[19] = ConnectorNumbering{7, 2}
+	outputConn[20] = ConnectorNumbering{7, 1}
 
 	//outputConn[21] = ConnectorNumbering{0, 0} // HANDSHAKE ENABLE
 	//outputConn[22] = ConnectorNumbering{0, 0} // CONTROL OUT 1
@@ -55,33 +55,33 @@ func fillOutputConnectorValues() {
 	//outputConn[24] = ConnectorNumbering{0, 0} // CONTROL OUT 3
 	//outputConn[25] = ConnectorNumbering{0, 0} // CONTROL OUT 4
 
-	outputConn[26] = ConnectorNumbering{5, 1}
-	outputConn[27] = ConnectorNumbering{5, 2}
-	outputConn[28] = ConnectorNumbering{5, 3}
-	outputConn[29] = ConnectorNumbering{5, 4}
+	outputConn[26] = ConnectorNumbering{5, 2}
+	outputConn[27] = ConnectorNumbering{5, 3}
+	outputConn[28] = ConnectorNumbering{5, 4}
+	outputConn[29] = ConnectorNumbering{5, 1}
 
-	outputConn[30] = ConnectorNumbering{10, 4} // order!
-	outputConn[31] = ConnectorNumbering{10, 3}
-	outputConn[32] = ConnectorNumbering{10, 2}
+	outputConn[30] = ConnectorNumbering{10, 4}
+	outputConn[31] = ConnectorNumbering{10, 2}
+	outputConn[32] = ConnectorNumbering{10, 3}
 	outputConn[33] = ConnectorNumbering{10, 1}
 
-	outputConn[34] = ConnectorNumbering{9, 4} // order!
-	outputConn[35] = ConnectorNumbering{9, 3}
-	outputConn[36] = ConnectorNumbering{9, 2}
-	outputConn[37] = ConnectorNumbering{9, 1}
+	outputConn[34] = ConnectorNumbering{9, 1}
+	outputConn[35] = ConnectorNumbering{9, 2}
+	outputConn[36] = ConnectorNumbering{9, 4}
+	outputConn[37] = ConnectorNumbering{9, 3}
 
-	outputConn[38] = ConnectorNumbering{4, 4} // order!
-	outputConn[39] = ConnectorNumbering{4, 3}
-	outputConn[40] = ConnectorNumbering{4, 2}
+	outputConn[38] = ConnectorNumbering{4, 1}
+	outputConn[39] = ConnectorNumbering{4, 2}
+	outputConn[40] = ConnectorNumbering{4, 3}
 
-	outputConn[41] = ConnectorNumbering{8, 4} // order!
+	outputConn[41] = ConnectorNumbering{8, 4}
 	outputConn[42] = ConnectorNumbering{8, 3}
 	outputConn[43] = ConnectorNumbering{8, 2}
 
-	outputConn[44] = ConnectorNumbering{6, 1}
-	outputConn[45] = ConnectorNumbering{6, 2}
-	outputConn[46] = ConnectorNumbering{6, 3}
-	outputConn[47] = ConnectorNumbering{6, 4}
+	outputConn[44] = ConnectorNumbering{6, 4}
+	outputConn[45] = ConnectorNumbering{6, 3}
+	outputConn[46] = ConnectorNumbering{6, 2}
+	outputConn[47] = ConnectorNumbering{6, 1}
 
 	//outputConn[48] = ConnectorNumbering{0, 0} // CONTROL IN 1
 	//outputConn[49] = ConnectorNumbering{0, 0} // CONTROL IN 2
@@ -120,6 +120,10 @@ func main() {
 		"value", -1,
 		"value for pin [0,1]",
 	)
+	dataString := flag.String(
+		"data", "0000000000",
+		"data string like 0000000000",
+	)
 	blink := flag.Bool(
 		"blink", false,
 		"switch pin on and off and on and off and...",
@@ -147,10 +151,10 @@ func main() {
 	defer d.Close()
 
 	if *blink == false {
-		fmt.Printf("Set pin %v to value %v \n", *pin, *value)
 	} else {
 		fmt.Printf("blinking pin %v\n", *pin)
 	}
+	fmt.Printf("data %v\n", *dataString)
 
 	if *blink == false {
 		//queryStr := ">>>>>>>>>>"
@@ -166,7 +170,7 @@ func main() {
 		}
 	} else {
 		offStr := "0000000000"
-		onStr := createQueryString(*pin)
+		onStr := *dataString
 		for true {
 			if _, err := fmt.Fprintln(d, onStr); err != nil {
 				fmt.Fprintln(os.Stderr, "Failed to write to device:", err)
@@ -200,7 +204,7 @@ func createQueryString(num int) string {
 		queryStr += "0"
 	}
 	queryStr += bitPosToNibble(bpos - 1)
-	for j := i + 1; j < 10; j++ {
+	for j := i + 1; j <= 10; j++ {
 		queryStr += "0"
 	}
 	return queryStr
