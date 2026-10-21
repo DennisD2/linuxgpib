@@ -100,51 +100,54 @@ func main() {
 	}
 	defer d.Close()
 
-	if *verbose {
-		fmt.Printf("%v iterations, %vs wait time between iterations\n", *count, *wait)
-	}
+	fmt.Printf("%v iterations, %vs wait time between iterations\n", *count, *wait)
 
-	var num = 0
-	vmax := 10 * 4
 	var timesum time.Duration = 0.0
-	for num < vmax {
-		start := time.Now()
+	var outerLoopMax = 100
+	var num = 0
+	for i := 0; i < outerLoopMax; i++ {
 
-		// flip string
-		//queryStr := ">>>>>>>>>>"
-		//queryStr := "0080000000"
-		queryStr := createQueryString(num)
-		fmt.Printf("Query: %v - %v\n", num, queryStr)
-		//if num%2 != 0 {
-		//	queryStr = "0000000000"
-		//}
-		if _, err := fmt.Fprintln(d, queryStr); err != nil {
-			fmt.Fprintln(os.Stderr, "Failed to write to device:", err)
-			os.Exit(1)
-		}
+		vmax := 10 * 4
+		for num < vmax {
+			start := time.Now()
 
-		elapsed := time.Since(start)
-		timesum += elapsed
-		num++
+			// flip string
+			//queryStr := ">>>>>>>>>>"
+			//queryStr := "0080000000"
+			queryStr := createQueryString(num)
+			fmt.Printf("Query: %v - %v\n", num, queryStr)
+			//if num%2 != 0 {
+			//	queryStr = "0000000000"
+			//}
+			if _, err := fmt.Fprintln(d, queryStr); err != nil {
+				fmt.Fprintln(os.Stderr, "Failed to write to device:", err)
+				os.Exit(1)
+			}
 
-		if *count == 0 {
-			time.Sleep(time.Duration(*wait) * time.Millisecond)
-		} else {
-			if num < *count {
+			elapsed := time.Since(start)
+			timesum += elapsed
+			num++
+
+			if *count == 0 {
 				time.Sleep(time.Duration(*wait) * time.Millisecond)
+			} else {
+				if num < *count {
+					time.Sleep(time.Duration(*wait) * time.Millisecond)
+				}
 			}
 		}
-	}
-	var pp float32 = float32(timesum.Microseconds())
-	pp = pp / float32(num)
-	pp = pp / 1000.0
-	if *verbose {
-		fmt.Printf("Medium time in %v iterations: %v ms\n", num, pp)
+		var pp float32 = float32(timesum.Microseconds())
+		pp = pp / float32(num)
+		pp = pp / 1000.0
+		if *verbose {
+			fmt.Printf("Medium time in %v iterations: %v ms\n", num, pp)
 
-		lines := internal.IblinesString(*board)
-		fmt.Printf("GPIB Lines: %v\n", lines)
+			lines := internal.IblinesString(*board)
+			fmt.Printf("GPIB Lines: %v\n", lines)
+		}
+		fmt.Printf("Outer loop: %v\n", i)
+		num = 0
 	}
-
 }
 
 func createQueryString(num int) string {
