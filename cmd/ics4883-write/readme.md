@@ -46,5 +46,5 @@ The loop starts again. Interrupt with CTRL-C.
 ## Notes, restrictions
 Besides the 40 data pins, there are 10 other pins. Two (1,5) have GND and +5V.
 4 others are output pins for handshake, and there are 3 input pins for handshake.
-Finally, there is one "handshake enable" like pin. It is not known how to use these
+Finally, there is one "handshake enable" like input pin. It is not known how to use these
 handshake lines.
