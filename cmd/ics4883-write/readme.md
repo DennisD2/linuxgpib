@@ -1,5 +1,5 @@
 # ICS4883 write code
-This is test code to access a ICS 4883 instrument coupler.
+This is test code to access a ICS 4883 instrument coupler in write mode.
 
 Code uses linuxgpib go API. Device is controlled via GPIB.
 
