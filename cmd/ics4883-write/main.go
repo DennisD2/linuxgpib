@@ -100,9 +100,9 @@ func fillOutputConnectorPinMap() {
 			continue
 		}
 		if outputConn[i].digit != 0 && outputConn[i].bit != 0 {
-			fmt.Printf("pin[%v] = { digit=%v, bit=%v }\n", i, outputConn[i].digit, outputConn[i].bit)
+			fmt.Printf("| %v | digit=%v, bit=%v ||\n", i, outputConn[i].digit, outputConn[i].bit)
 		} else {
-			fmt.Printf("pin[%v] %v\n", i, outputConn[i].info)
+			fmt.Printf("| %v | %v ||\n", i, outputConn[i].info)
 		}
 	}
 }
