@@ -57,9 +57,9 @@ func fillOutputConnectorPinMap() {
 	outputConn[19] = ConnectorNumbering{7, 2, ""}
 	outputConn[20] = ConnectorNumbering{7, 1, ""}
 
-	outputConn[21] = ConnectorNumbering{0, 0, "HANDSHAKE_ENABLE"}
-	outputConn[22] = ConnectorNumbering{0, 0, "CONTROL OUT 1"}
-	outputConn[23] = ConnectorNumbering{0, 0, "CONTROL OUT 2"}
+	outputConn[21] = ConnectorNumbering{0, 0, "HANDSHAKE_ENABLE (INPUT)"}
+	outputConn[22] = ConnectorNumbering{0, 0, "DATA READY (CONTROL OUT 1)"}
+	outputConn[23] = ConnectorNumbering{0, 0, "/DATA READY (CONTROL OUT 2)"}
 	outputConn[24] = ConnectorNumbering{0, 0, "CONTROL OUT 3"}
 	outputConn[25] = ConnectorNumbering{0, 0, "CONTROL OUT 4"}
 
