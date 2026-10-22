@@ -18,31 +18,34 @@ import (
 var CONNECTOR_SIZE = 50
 
 type ConnectorNumbering struct {
-	byte int
-	bit  int
-	info string
+	digit int
+	bit   int
+	info  string
 }
 
 var outputConn = [50 + 1]ConnectorNumbering{}
 
+// fillOutputConnectorPinMap maps pins of output connector to digit pins
+// ICS4883 output connector has a strange arrangement of pins, so we need a mapping
+// We have 10 digits (1..10). Each digit uses 4 bits (1..4)
+// Besides data pins, there are also control pins, in to tal 10 pins.
 func fillOutputConnectorPinMap() {
-
-	outputConn[0] = ConnectorNumbering{0, 0, "N.A."} // no index 0 at connector, starts with 1
-	outputConn[1] = ConnectorNumbering{0, 0, "GND"}  // GND
+	outputConn[0] = ConnectorNumbering{0, 0, "N.A."} // no pin 0 at connector, starts with 1
+	outputConn[1] = ConnectorNumbering{0, 0, "GND"}
 	outputConn[2] = ConnectorNumbering{3, 1, ""}
 	outputConn[3] = ConnectorNumbering{3, 2, ""}
 	outputConn[4] = ConnectorNumbering{3, 3, ""}
-	outputConn[5] = ConnectorNumbering{0, 0, "VCC"} // VCC
+	outputConn[5] = ConnectorNumbering{0, 0, "VCC"}
 	outputConn[6] = ConnectorNumbering{3, 4, ""}
 
-	outputConn[7] = ConnectorNumbering{4, 4, ""} // out-of-order
+	outputConn[7] = ConnectorNumbering{4, 4, ""}
 
 	outputConn[8] = ConnectorNumbering{2, 4, ""}
 	outputConn[9] = ConnectorNumbering{2, 3, ""}
 	outputConn[10] = ConnectorNumbering{2, 2, ""}
 	outputConn[11] = ConnectorNumbering{2, 1, ""}
 
-	outputConn[12] = ConnectorNumbering{8, 1, ""} // out-of-order
+	outputConn[12] = ConnectorNumbering{8, 1, ""}
 
 	outputConn[13] = ConnectorNumbering{1, 1, ""}
 	outputConn[14] = ConnectorNumbering{1, 2, ""}
@@ -54,11 +57,11 @@ func fillOutputConnectorPinMap() {
 	outputConn[19] = ConnectorNumbering{7, 2, ""}
 	outputConn[20] = ConnectorNumbering{7, 1, ""}
 
-	outputConn[21] = ConnectorNumbering{0, 0, "HANDSHAKE_ENABLE"} // HANDSHAKE ENABLE
-	outputConn[22] = ConnectorNumbering{0, 0, "CONTROL OUT 1"}    // CONTROL OUT 1
-	outputConn[23] = ConnectorNumbering{0, 0, "CONTROL OUT 2"}    // CONTROL OUT 2
-	outputConn[24] = ConnectorNumbering{0, 0, "CONTROL OUT 3"}    // CONTROL OUT 3
-	outputConn[25] = ConnectorNumbering{0, 0, "CONTROL OUT 4"}    // CONTROL OUT 4
+	outputConn[21] = ConnectorNumbering{0, 0, "HANDSHAKE_ENABLE"}
+	outputConn[22] = ConnectorNumbering{0, 0, "CONTROL OUT 1"}
+	outputConn[23] = ConnectorNumbering{0, 0, "CONTROL OUT 2"}
+	outputConn[24] = ConnectorNumbering{0, 0, "CONTROL OUT 3"}
+	outputConn[25] = ConnectorNumbering{0, 0, "CONTROL OUT 4"}
 
 	outputConn[26] = ConnectorNumbering{5, 2, ""}
 	outputConn[27] = ConnectorNumbering{5, 3, ""}
@@ -88,16 +91,16 @@ func fillOutputConnectorPinMap() {
 	outputConn[46] = ConnectorNumbering{6, 2, ""}
 	outputConn[47] = ConnectorNumbering{6, 1, ""}
 
-	outputConn[48] = ConnectorNumbering{0, 0, "CONTROL IN 1"} // CONTROL IN 1
-	outputConn[49] = ConnectorNumbering{0, 0, "CONTROL IN 2"} // CONTROL IN 2
-	outputConn[50] = ConnectorNumbering{0, 0, "CONTROL IN 3"} // CONTROL IN 3
+	outputConn[48] = ConnectorNumbering{0, 0, "CONTROL IN 1"}
+	outputConn[49] = ConnectorNumbering{0, 0, "CONTROL IN 2"}
+	outputConn[50] = ConnectorNumbering{0, 0, "CONTROL IN 3"}
 
 	for i := 0; i < len(outputConn); i++ {
 		if i == 0 {
 			continue
 		}
-		if outputConn[i].byte != 0 && outputConn[i].bit != 0 {
-			fmt.Printf("pin[%v] = { byte=%v, bit=%v }\n", i, outputConn[i].byte, outputConn[i].bit)
+		if outputConn[i].digit != 0 && outputConn[i].bit != 0 {
+			fmt.Printf("pin[%v] = { digit=%v, bit=%v }\n", i, outputConn[i].digit, outputConn[i].bit)
 		} else {
 			fmt.Printf("pin[%v] %v\n", i, outputConn[i].info)
 		}
@@ -202,7 +205,7 @@ func main() {
 func createDataString(num int) string {
 	// String looks like "0080000000"
 	// num is in [1..50]
-	cpos := outputConn[num].byte
+	cpos := outputConn[num].digit
 	bpos := outputConn[num].bit
 	if cpos == 0 && bpos == 0 {
 		fmt.Printf("invalid pin position, no data pin: %v\n", num)
