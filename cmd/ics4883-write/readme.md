@@ -2,6 +2,7 @@
 This is test code to access a ICS 4883 instrument coupler in write mode.
 
 Code uses linuxgpib go API. Device is controlled via GPIB.
+Information on that API: https://github.com/msiegen/linuxgpib
 
 ICS4883 accepts strings in formast "dddddddddd\n\r". 'd' is some digit like
 0-9 or a few alphanumeric chars. Only the lower 4 bits of a character byte
