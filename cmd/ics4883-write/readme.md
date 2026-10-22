@@ -4,7 +4,7 @@ This is test code to access a ICS 4883 instrument coupler.
 Code uses linuxgpib go API. Device is controlled via GPIB.
 
 ICS4883 accepts strings in formast "dddddddddd\n\r". 'd' is some digit like
-0-9 or a few alphanimeric chars. Only the lower 4 bits of a character byte
+0-9 or a few alphanumeric chars. Only the lower 4 bits of a character byte
 are used and forwarded to the output pins. So each character send corresponds 
 to 4 bits at the output connector.
 
@@ -39,7 +39,7 @@ Example:
 ```
 
 #### Blinking
-Use "-blink" to repeat in endless loop. The command string is sent, after 100 ms
+Use ```blink``` to repeat in endless loop. The command string is sent, after 100 ms
 a string with all zeros "0000000000" is sent to clear all pins, another 100 ms is waited.
 The loop starts again. Interrupt with CTRL-C.
 
