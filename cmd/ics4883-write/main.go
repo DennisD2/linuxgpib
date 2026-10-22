@@ -28,7 +28,7 @@ var outputConn = [50 + 1]ConnectorNumbering{}
 // fillOutputConnectorPinMap maps pins of output connector to digit pins
 // ICS4883 output connector has a strange arrangement of pins, so we need a mapping
 // We have 10 digits (1..10). Each digit uses 4 bits (1..4)
-// Besides data pins, there are also control pins, in to tal 10 pins.
+// Besides data pins, there are also control pins, in total 10 pins.
 func fillOutputConnectorPinMap() {
 	outputConn[0] = ConnectorNumbering{0, 0, "N.A."} // no pin 0 at connector, starts with 1
 	outputConn[1] = ConnectorNumbering{0, 0, "GND"}
