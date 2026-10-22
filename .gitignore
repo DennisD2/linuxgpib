@@ -1,6 +1,5 @@
+/.idea
 /cmd/readadc/readadc
 /cmd/identify/identify
-
-/.idea
 /cmd/ics4883-write/ics4883-write
 /cmd/ics4883-read/ics4883-read
