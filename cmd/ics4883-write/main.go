@@ -1,6 +1,6 @@
 /*
 ICS4883 Instrument coupler test code
-output tests - writung to output connector
+output tests - writing to output connector
 */
 package main
 
