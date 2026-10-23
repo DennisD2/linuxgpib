@@ -62,3 +62,7 @@ Read 12 bytes
 Besides the 40 data pins, there are 10 other pins. Two (1,5) have GND and +5V.
 4 others are output pins for handshake, and there are 4 input pins for handshake.
 Pin 2 is "DATA READY", pin 6 is "/DATA READY". The functionality of remaining 6 pins is yet unknown.
+
+## Links
+* https://linux-gpib.sourceforge.io/doc_html/t1.html
+* 
